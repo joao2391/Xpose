@@ -1,0 +1,25 @@
+{
+    "name": "Xpose",
+    "version": "1.0",
+    "description": "Xpose is extension that helps you to scrap web pages. It shows you a lot of information about the page.",
+    "icons": {
+      "128": "img/spy.png"
+    },
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "content_scripts": [
+        {
+          "matches": [
+            "<all_urls>"
+          ],
+          "js": ["content.js"]
+        }
+      ],      
+      "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": "img/spy.png"
+      },   
+    "manifest_version": 2
+  }
