@@ -1,24 +1,18 @@
-//TODO
-/*
-  int countCSS = expose.CountCSSAsync(); OK
-  int countJS = expose.CountJSAsync(); OK
-  int countHtmlElements = CountHtmlElementsAsync(); OK
-  int countMetaTags = expose.CountMetaAsync(); OK
-  HashSet<string> hsJS = expose.GetJSContentAsync();
-  HashSet<String> hsCSS =  expose.GetCSSContentAsync();
-  int countOnclickEvents = expose.CountOnclickEventsAsync();
-  int countForms = expose.CountFormsAsync(); OK
-  Dictionary<string,string> dicFormInfo = expose.FormsInfoAsync();
-  long? pageSize = expose.GetSizeOfPageAsync();
-  string report = expose.GetReportAsync();
-  bool hasAjaxCall = expose.HasAjaxCallAsync();
-*/
-let head = document.getElementsByTagName('head');
-let body = document.getElementsByTagName('body');
-
-
 function CountCSS(){
-    let totalCss = document.querySelectorAll('style').length; 
+    let totalCss = document.querySelectorAll('style').length;
+    
+    let nodeList = document.querySelectorAll('link');    
+  
+    for (let i = 0; i < nodeList.length; i++) {
+  
+      const element = nodeList[i];
+  
+      if(element.rel == "stylesheet"){
+        
+        totalCss++;
+      }      
+      
+    }
 
   return totalCss;
   
@@ -26,7 +20,7 @@ function CountCSS(){
 
 function CountJS(){
     let totalJs = document.querySelectorAll('script').length; 
-    
+
       return totalJs;
 }
 
@@ -49,7 +43,76 @@ function CountFormsElements(){
   return countForms;
 }
 
-//console.log('HTML -> '+CountHtmlElements());
+function GetJSContent(){
+
+  let nodeList = document.querySelectorAll('script');
+  let jsList = [];
+
+  for (let i = 0; i < nodeList.length; i++) {
+    const element = nodeList[i];
+
+    jsList.push(element.src.trim());
+    
+  }
+
+  return jsList;
+}
+
+function GetCSSContent(){
+
+  let nodeList = document.querySelectorAll('link');
+  let cssList = [];
+
+  for (let i = 0; i < nodeList.length; i++) {
+
+    const element = nodeList[i];
+
+    if(element.rel == "stylesheet"){
+
+      cssList.push(element.href);
+    }
+    
+    
+  }
+
+  return cssList;
+}
+
+function CountOnclickEvents(){
+
+  let ocCount = document.querySelectorAll('[onclick]').length;
+
+  return ocCount;
+}
+
+function GetformsInfo(){
+
+  let nodeList = document.querySelectorAll('form');
+  let formInfoList = [];
+  let formInfo = '';
+
+  for (let i = 0; i < nodeList.length; i++) {
+
+    const element = nodeList[i];  
+    
+    formInfo = formInfo.concat('Form ID: ', element.id, ' | Action: ', element.action,
+                    ' | Method: ', element.method, ' | Autocomplete: ', element.autocomplete);
+
+    formInfoList.push(formInfo);
+  }
+
+  return formInfoList;
+
+}
+
+function GetSizeOfPage(){
+
+  let htmlLength = document.getElementsByTagName('HTML')[0].outerHTML.length;
+
+  let size = Math.ceil(htmlLength / 1024) + " KB";
+
+  return size;
+}
 
 chrome.runtime.sendMessage({
     from: 'content',
@@ -67,6 +130,11 @@ chrome.runtime.sendMessage({
         totalHtml: CountHtmlElements(),
         totalMeta: CountMetaElements(),
         totalForms: CountFormsElements(),
+        jsContent: GetJSContent(),
+        cssContent: GetCSSContent(),
+        totalOnClick: CountOnclickEvents(),
+        formInfo: GetformsInfo(),
+        pageSize: GetSizeOfPage(),
       };
 
       response(expose);
