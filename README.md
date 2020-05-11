@@ -6,7 +6,7 @@ Xpose is a browser extension that helps you to scrap web pages. It has the same 
 
 ## Installation
 
-Unfortunately it is available only in FireFox (I won't pay 5 dollars to g Dev Store). If you have a [GDS](https://developer.chrome.com/webstore/publish) account fell free to publish this extension over there.
+Unfortunately it is available only in FireFox. If you have a [GDS](https://developer.chrome.com/webstore/publish) account feel free to publish this extension over there.
 
 To install it on FireFox just search by "Xpose" or [click here](https://addons.mozilla.org/pt-BR/firefox/addon/xpose/?src=search)
 
